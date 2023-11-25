@@ -25,12 +25,19 @@ app.use(function (req, res, next) {
     // to the API (e.g. in case you use sessions)
     res.setHeader('Access-Control-Allow-Credentials', true);
 
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200)
+    }
+
     // Pass to next layer of middleware
     next();
 });
 
 // config View engine
 configViewEngine(app)
+
+// config cookie parser
+app.use(cookieParser())
 
 // config body parser
 app.use(bodyParser.json())
@@ -40,7 +47,13 @@ app.use(bodyParser.urlencoded({ extended: true }))
 initWebRoutes(app)
 initApiRoutes(app)
 
+
+
 const PORT = process.env.PORT || 8888
+
+app.use((req, res) => {
+    return res.send('404 not found')
+})
 
 app.listen(PORT, () => {
     console.log(`App is running on the port: http://localhost:${PORT}`)

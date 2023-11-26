@@ -1,50 +1,31 @@
-import addressService from "../service/addressService"
+import authenticationService from "../service/authenticationService"
+const handleRegisterNewUser = async (req, res) => {
 
-const testApi = (req, res) => {
-    console.log('call from mobile')
+    let data = await authenticationService.registerNewUser(req.body)
+
     return res.status(200).json({
-        message: 'ok',
-        data: 'test api'
+        EM: data.EM,
+        EC: data.EC,
+        DT: '',
     })
 }
 
-const handleRegister = (req, res) => {
-    console.log('dang ky ne', req.body)
-}
-
-const getAllProvince = async (req, res) => {
-    try {
-        let data = await addressService.getProvinceService()
-        return res.status(200).json({
-            data: data,
-            errCode: 0,
-            message: 'Success'
-        })
-    } catch (error) {
-        return res.status(200).json({
-            errCode: -1,
-            message: 'Error from server'
-        })
+const handleLogin = async (req, res) => {
+    let data = await authenticationService.login(req.body)
+    if (data && data.DT && data.DT.access_token) {
+        res.cookie("jwt", data.DT, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 })
     }
+
+
+    return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+    })
 }
 
-const getDistrictById = async (req, res) => {
-    console.log(req.query.provinceId)
-    try {
-
-        let data = await addressService.getDistrictById(req.query.provinceId);
-        return res.status(200).json(data)
-    } catch (error) {
-        return res.status(200).json({
-            errCode: -1,
-            message: 'Error from server'
-        })
-    }
-}
 
 module.exports = {
-    testApi,
-    handleRegister,
-    getAllProvince,
-    getDistrictById
+    handleRegisterNewUser,
+    handleLogin
 }

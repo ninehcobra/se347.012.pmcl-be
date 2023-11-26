@@ -14,7 +14,7 @@ const hashPassword = (userPassword) => {
 
 const registerNewUser = async (rawUserData) => {
     try {
-        if (rawUserData && rawUserData.email && rawUserData.password && rawUserData.name) {
+        if (rawUserData && rawUserData.email && rawUserData.password && rawUserData.name && rawUserData.phoneNumber && rawUserData.address) {
             if (await checkEmail(rawUserData.email)) {
                 return {
                     EM: 'Email is already exist',
@@ -28,6 +28,8 @@ const registerNewUser = async (rawUserData) => {
                     email: rawUserData.email,
                     password: hashpassword,
                     name: rawUserData.name,
+                    phoneNumber: rawUserData.phoneNumber,
+                    address: rawUserData.address,
                     groupId: 2
                 })
 
@@ -69,10 +71,12 @@ const login = async (rawUserData) => {
                     email: rawUserData.email
                 }
             });
+            console.log(user.id)
 
             if (user) {
                 const match = await bcrypt.compare(rawUserData.password, user.password);
                 if (match) {
+                    console.log('match ne')
 
                     let roles = await getGroupWithRoles(user)
                     let payload = {
@@ -81,7 +85,6 @@ const login = async (rawUserData) => {
                         name: user.name,
                         avatar: user.avatar,
                         phoneNumber: user.phoneNumber,
-                        gender: user.gender,
                         email: user.email,
                         roles,
                         expiresIn: process.env.JWT_EXPIRES_IN
@@ -98,7 +101,7 @@ const login = async (rawUserData) => {
                             name: user.name,
                             avatar: user.avatar,
                             address: user.address,
-                            gender: user.gender,
+                            phoneNumber: user.phoneNumber
                         }
                     };
                 } else {

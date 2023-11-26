@@ -6,17 +6,11 @@ const router = express.Router()
 
 
 const initApiRoutes = (app) => {
-    router.get("/about", (req, res) => {
-        return res.send('vailz')
-    })
+
 
     // rest api
-    router.get("/test-api", apiController.testApi)
-
-    router.get("/get-all-province", apiController.getAllProvince)
-    router.get("/get-district-by-id", apiController.getDistrictById)
-
-    router.post("/register", apiController.handleRegister)
+    router.post("/register", apiController.handleRegisterNewUser)
+    router.post("/login", apiController.handleLogin)
 
     return app.use("/api", router)
 }

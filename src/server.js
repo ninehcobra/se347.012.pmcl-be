@@ -6,10 +6,18 @@ import dotenv from "dotenv"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import { createJWT, verifyToken } from "./middleware/JWTAction"
+import morgan from "morgan"
+import compression from "compression"
+import helmet from "helmet";
 
 dotenv.config()
 
 const app = express()
+
+// add middleware
+app.use(morgan('dev'))
+app.use(compression())
+app.use(helmet())
 
 // fix CORS
 app.use(function (req, res, next) {

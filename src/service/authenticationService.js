@@ -46,7 +46,7 @@ const registerNewUser = async (rawUserData) => {
             }
         }
     } catch (e) {
-        console.log(e)
+
         return {
             EM: 'Something wrongs in service...',
             EC: -2,
@@ -71,12 +71,12 @@ const login = async (rawUserData) => {
                     email: rawUserData.email
                 }
             });
-            console.log(user.id)
+
 
             if (user) {
                 const match = await bcrypt.compare(rawUserData.password, user.password);
                 if (match) {
-                    console.log('match ne')
+
 
                     let roles = await getGroupWithRoles(user)
                     let payload = {

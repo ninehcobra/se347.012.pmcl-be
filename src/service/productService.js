@@ -67,6 +67,8 @@ const getProduct = async (productId) => {
     }
 }
 
+
+
 const updateProduct = async (data) => {
     let product = data.data
     if (data && product.id) {
@@ -77,6 +79,7 @@ const updateProduct = async (data) => {
                 descriptionMarkdown: product.descriptionMarkdown,
                 descriptionHTML: product.descriptionHTML,
                 startPrice: product.startPrice,
+                currentPrice: product.startPrice,
                 jumpPrice: product.jumpPrice,
                 startTime: product.startTime,
                 endTime: product.endTime,

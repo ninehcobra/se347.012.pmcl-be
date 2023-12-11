@@ -1,6 +1,6 @@
 const handleHelloWorld = (req, res) => {
-    const cac = 'harhahaha'
-    return res.render("CRUD.ejs", { cac })
+    const nineh = 'harhahaha'
+    return res.render("CRUD.ejs", { nineh })
 }
 
 module.exports = {

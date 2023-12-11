@@ -1,23 +1,20 @@
 import db from "../models/index"
 
 const createProduct = async (data) => {
-    if (data && data.name && data.description && data.startPrice && data.currentPrice && data.startTime && data.endTime && data.images && data.user) {
+    if (data && data.name && data.user) {
         try {
 
-            await db.Product.create({
+            let res = await db.Product.create({
                 name: data.name,
-                description: data.description,
-                startPrice: data.startPrice,
-                currentPrice: data.currentPrice,
-                startTime: data.startTime,
-                endTime: data.endTime,
-                images: data.images,
                 sellerId: data.user.id
             })
 
             return ({
                 EC: 0,
-                EM: 'Create prodct success'
+                EM: 'Create prodct success',
+                DT: {
+                    id: res.id
+                }
             })
         } catch (error) {
             return ({
@@ -70,7 +67,65 @@ const getProduct = async (productId) => {
     }
 }
 
+const updateProduct = async (data) => {
+    let product = data.data
+    if (data && product.id) {
+        try {
+
+            await db.Product.update({
+                name: product.name,
+                descriptionMarkdown: product.descriptionMarkdown,
+                descriptionHTML: product.descriptionHTML,
+                startPrice: product.startPrice,
+                jumpPrice: product.jumpPrice,
+                startTime: product.startTime,
+                endTime: product.endTime,
+                categoryId: product.categoryId,
+                images: product.images,
+                updatedAt: new Date(),
+
+            }, {
+                where: {
+                    id: product.id
+                }
+            })
+            return {
+                EC: 0,
+                EM: 'Update product success'
+            }
+        } catch (error) {
+            return {
+                EC: -1,
+                EM: 'Something wrong on server'
+            }
+        }
+    }
+    else {
+        return {
+            EC: -2,
+            EM: 'Missing parameter'
+        }
+    }
+}
+
+const deleteProduct = async (id) => {
+    if (id) {
+        try {
+
+        } catch (error) {
+
+        }
+    }
+    else {
+        return {
+            EC: -2,
+            EM: 'Missing parameters'
+        }
+    }
+}
+
 module.exports = {
     createProduct,
-    getProduct
+    getProduct,
+    updateProduct
 }

@@ -1,5 +1,6 @@
 import authenticationService from "../service/authenticationService"
 import productService from "../service/productService"
+import categoryService from "../service/categoryService"
 const handleRegisterNewUser = async (req, res) => {
 
     let data = await authenticationService.registerNewUser(req.body)
@@ -54,11 +55,40 @@ const handleGetProduct = async (req, res) => {
     })
 }
 
+const handleUpdateProduct = async (req, res) => {
+    let data = await productService.updateProduct(req.body)
+    return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+    })
+}
+
+const handleCreateCategory = async (req, res) => {
+    let data = await categoryService.createCategory(req.body.name)
+    return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+    })
+}
+
+const handleGetCategory = async (req, res) => {
+    let data = await categoryService.getCategory()
+    return res.status(200).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+    })
+}
 
 module.exports = {
     handleRegisterNewUser,
     handleLogin,
     handlegetUserAccount,
     handleCreateProduct,
-    handleGetProduct
+    handleGetProduct,
+    handleUpdateProduct,
+    handleCreateCategory,
+    handleGetCategory
 }

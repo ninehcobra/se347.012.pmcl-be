@@ -16,6 +16,10 @@ const initApiRoutes = (app) => {
 
     router.post("/create-product", apiController.handleCreateProduct)
     router.get("/get-product", apiController.handleGetProduct)
+    router.post("/update-product", apiController.handleUpdateProduct)
+
+    router.post("/create-category", apiController.handleCreateCategory)
+    router.get('/get-category', apiController.handleGetCategory)
 
     return app.use("/api", router)
 }

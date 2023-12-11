@@ -12,13 +12,19 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      description: {
+      descriptionHTML: {
+        type: Sequelize.TEXT('long')
+      },
+      descriptionMarkdown: {
         type: Sequelize.TEXT('long')
       },
       startPrice: {
         type: Sequelize.STRING
       },
       currentPrice: {
+        type: Sequelize.STRING
+      },
+      jumpPrice: {
         type: Sequelize.STRING
       },
       startTime: {
@@ -28,7 +34,11 @@ module.exports = {
         type: Sequelize.DATE
       },
       images: {
-        type: Sequelize.STRING
+        type: Sequelize.JSON,
+        allowNull: true,
+      },
+      categoryId: {
+        type: Sequelize.INTEGER
       },
       sellerId: {
         type: Sequelize.INTEGER

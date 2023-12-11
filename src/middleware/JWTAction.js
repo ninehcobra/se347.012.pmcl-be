@@ -23,7 +23,7 @@ let verifyToken = (token) => {
     return new Promise((resolve, reject) => {
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                console.log('Tài khoản hết hạn xác thực');
+
                 resolve(null)
             } else {
                 resolve(decoded);
@@ -77,7 +77,7 @@ const extractToken = (req) => {
 }
 
 const checkUserJWT = async (req, res, next) => {
-    console.log('Đang thực hiện request ở link: ', req.path)
+
     if (nonSecurePaths.includes(req.path)) return next();
     let cookies = req.cookies;
     const tokenFromHeader = extractToken(req)

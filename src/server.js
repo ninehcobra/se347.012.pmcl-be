@@ -9,10 +9,40 @@ import { createJWT, verifyToken } from "./middleware/JWTAction"
 import morgan from "morgan"
 import compression from "compression"
 import helmet from "helmet";
+import productService from "./service/productService"
+import bidService from "./service/bidService"
+
 
 dotenv.config()
 
 const app = express()
+// const server = require('http').createServer(app);
+// const io = require('socket.io')(server, { cors: { origin: 'http://localhost:3000' } });;
+
+const cron = require('node-cron');
+
+// server.listen(3333)
+// io.on('connection', (socket) => {
+//     console.log('New connection:', socket.id);
+
+//     socket.on('placeBid', (data) => {
+//         console.log('Received placeBid:', data);
+//         // Xử lý sự kiện ở đây
+//         socket.emit('bidPlaced', data)
+//     });
+// });
+
+cron.schedule('*/5 * * * * *', async () => {
+    let res = await productService.findAllExpiredProducts()
+
+    if (res.DT.length > 0) {
+        await bidService.setFinishProduct(res.DT[0].id, res.DT[0]['Auctions.winnerId'])
+
+    }
+
+    console.log('Running scheduled task every 5 seconds...');
+
+});
 
 // add middleware
 app.use(morgan('dev'))

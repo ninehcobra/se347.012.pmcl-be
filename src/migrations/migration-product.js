@@ -43,6 +43,15 @@ module.exports = {
       sellerId: {
         type: Sequelize.INTEGER
       },
+      isPublished: {
+        type: Sequelize.BOOLEAN
+      }
+      ,
+      isPay: {
+        type: Sequelize.BOOLEAN
+      }
+      ,
+      isCompleted: { type: Sequelize.BOOLEAN },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

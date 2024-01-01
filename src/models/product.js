@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Product.belongsTo(models.User, { foreignKey: 'sellerId' })
+            Product.hasMany(models.Auction, { foreignKey: 'productId' });
+
+            Product.hasMany(models.Favorite, { foreignKey: 'productId' });
         }
     }
     Product.init({
@@ -25,7 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         endTime: DataTypes.DATE,
         sellerId: DataTypes.INTEGER,
         categoryId: DataTypes.INTEGER,
-        images: DataTypes.JSON
+        images: DataTypes.JSON,
+        isPublished: DataTypes.BOOLEAN,
+        isCompleted: DataTypes.BOOLEAN,
+        isPay: DataTypes.BOOLEAN
     }, {
         sequelize,
         modelName: 'Product',

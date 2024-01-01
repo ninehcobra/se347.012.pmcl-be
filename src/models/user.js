@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.belongsTo(models.Group)
       User.hasMany(models.Product, { foreignKey: 'id' })
+
+      User.hasMany(models.Favorite, { foreignKey: 'userId' });
     }
   }
   User.init({

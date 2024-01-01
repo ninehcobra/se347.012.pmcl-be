@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { Op } from "sequelize"
 import { getGroupWithRoles } from "./JWTService"
 import { createJWT } from "../middleware/JWTAction"
+import user from "../models/user"
 require('dotenv').config()
 
 const salt = bcrypt.genSaltSync(10)
@@ -131,7 +132,100 @@ const login = async (rawUserData) => {
     }
 };
 
+const updateUser = async (userId, updatedData) => {
+    if (userId && updatedData) {
+        console.log(updatedData)
+        try {
+            // Kiểm tra xem người dùng có tồn tại không
+            const user = await db.User.findByPk(userId);
+
+            if (!user) {
+                return {
+                    EC: -1,
+                    EM: 'User not found',
+                };
+            }
+
+            // Thực hiện cập nhật thông tin người dùng
+            await user.update(updatedData);
+            console.log(user)
+
+            return {
+                EC: 0,
+                EM: 'Update user success',
+            };
+        } catch (error) {
+            console.error('Error updating user:', error);
+
+            return {
+                EC: -2,
+                EM: 'Something went wrong on the server',
+            };
+        }
+    }
+    else {
+        return {
+            EC: -3,
+            EM: 'Missing parameters'
+        }
+    }
+};
+
+const updatePassword = async (rawUserData) => {
+    try {
+        if (rawUserData && rawUserData.userId && rawUserData.oldPassword && rawUserData.newPassword) {
+            const user = await db.User.findOne({
+                where: {
+                    id: rawUserData.userId
+                }
+            });
+
+            if (user) {
+                const match = await bcrypt.compare(rawUserData.oldPassword, user.password);
+                if (match) {
+                    const hashNewPassword = hashPassword(rawUserData.newPassword);
+                    await db.User.update({
+                        password: hashNewPassword
+                    }, {
+                        where: {
+                            id: rawUserData.userId
+                        }
+                    });
+
+                    return {
+                        EM: 'Password updated successfully',
+                        EC: 0
+                    };
+                } else {
+                    return {
+                        EM: 'Wrong old password',
+                        EC: 3
+                    };
+                }
+            } else {
+                return {
+                    EM: 'User not found',
+                    EC: 1
+                };
+            }
+        } else {
+            return {
+                EM: 'Missing parameters',
+                EC: 2
+            };
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            EM: 'Something went wrong in the service',
+            EC: -2
+        };
+    }
+};
+
 module.exports = {
     registerNewUser,
-    login
+    login,
+    updateUser,
+    updatePassword
 }
